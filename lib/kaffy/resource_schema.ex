@@ -61,7 +61,8 @@ defmodule Kaffy.ResourceSchema do
       update: :editable,
       label: nil,
       type: nil,
-      choices: nil
+      choices: nil,
+      render_form: nil
     }
 
     Map.merge(default, options || %{})
@@ -173,6 +174,9 @@ defmodule Kaffy.ResourceSchema do
           |> Map.drop([:__meta__])
           |> Kaffy.Utils.json().encode!(escape: :html_safe, pretty: true)
         end
+
+      !is_nil(options) and Map.has_key?(options, :render_index) and is_function(options.render_index) ->
+        options.render_index.(schema, field, options)
 
       Kaffy.Utils.is_module(ft) && Keyword.has_key?(ft.__info__(:functions), :render_index) ->
         ft.render_index(conn, schema, field, options)
