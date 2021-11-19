@@ -129,6 +129,13 @@ defmodule Kaffy.Utils do
     end
   end
 
+  def full_dashboards(conn) do
+    case env(:dashboards) do
+      f when is_function(f) -> f.(conn)
+      _ -> []
+    end
+  end
+
   @doc """
   Returns a list of contexts as atoms.
 
@@ -140,6 +147,11 @@ defmodule Kaffy.Utils do
   @spec contexts(Plug.Conn.t()) :: [atom()]
   def contexts(conn) do
     full_resources(conn)
+    |> Enum.map(fn {context, _options} -> context end)
+  end
+
+  def dashboard_contexts(conn) do
+    full_dashboards(conn)
     |> Enum.map(fn {context, _options} -> context end)
   end
 
@@ -177,6 +189,15 @@ defmodule Kaffy.Utils do
   def context_name(conn, context) do
     default = Kaffy.ResourceAdmin.humanize_term(context)
     get_in(full_resources(conn), [context, :name]) || default
+  end
+
+  def dashboard_context_name(conn, context) when is_atom(context) do
+    default = Kaffy.ResourceAdmin.humanize_term(context)
+    get_in(full_dashboards(conn), [context, :name]) || default
+  end
+  def dashboard_context_name(conn, context) do
+    context = convert_to_atom(context)
+    dashboard_context_name(conn, context)
   end
 
   @doc """
@@ -217,6 +238,11 @@ defmodule Kaffy.Utils do
   def get_resource(conn, context, resource) do
     {context, resource} = convert_to_atoms(context, resource)
     get_in(full_resources(conn), [context, :resources, resource])
+  end
+
+  def get_dashboard(conn, context) do
+    context = convert_to_atom(context)
+    get_in(full_dashboards(conn), [context, :admin])
   end
 
   @doc """

@@ -32,6 +32,7 @@ defmodule Kaffy.Routes do
 
         get("/", HomeController, :index, as: :kaffy_home)
         get("/dashboard", HomeController, :dashboard, as: :kaffy_dashboard)
+        get("/custom-dashboard/:context", CustomDashboardController, :index, as: :kaffy_custom_dashboard)
         get("/tasks", TaskController, :index, as: :kaffy_task)
         get("/p/:slug", PageController, :index, as: :kaffy_page)
         get("/:context/:resource", ResourceController, :index, as: :kaffy_resource)

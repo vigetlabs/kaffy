@@ -1,0 +1,35 @@
+<div class="page-header">
+    <h3 class="page-title"><%= @name %></h3>
+</div>
+
+<%= if Enum.empty?(@widgets) do %>
+
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <h4>You can add widgets to this page by defining <code>widgets/1</code> in your dashboard's admin module.</h4>
+        </div>
+    </div>
+
+<% else %>
+
+    <div class="row mt-1 row-cols-1 row-cols-md-2 row-cols-sm-1 row-cols-xs-1">
+        <%= for widget <- @widgets do %>
+            <%= if widget.type == "text" do %>
+                <%= render KaffyWeb.HomeView, "_text.html", widget: widget %>
+            <% end %>
+
+            <%= if widget.type == "chart" do %>
+                <%= render KaffyWeb.HomeView, "_chart.html", widget: widget %>
+            <% end %>
+
+            <%= if widget.type == "progress" do %>
+                <%= render KaffyWeb.HomeView, "_progress.html", widget: widget %>
+            <% end %>
+
+            <%= if widget.type == "tidbit" do %>
+                <%= render KaffyWeb.HomeView, "_tidbit.html", widget: widget %>
+            <% end %>
+        <% end %>
+    </div>
+
+<% end %>
