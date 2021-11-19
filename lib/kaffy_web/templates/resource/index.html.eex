@@ -77,7 +77,7 @@
 </div>
 
 <form id="kaffy-filters-form" method="get" style="display:none;">
-  <%= if Kaffy.ResourceSchema.has_field_filters?(@my_resource) do %>
+  <%= if Kaffy.ResourceSchema.has_field_filters?(@my_resource, @conn) do %>
     <%= for field <- @fields do %>
         <% {field, filters} = Kaffy.ResourceSchema.kaffy_field_filters(@my_resource[:schema], field) %>
         <%= if filters do %>

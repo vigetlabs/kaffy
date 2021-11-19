@@ -123,8 +123,8 @@ defmodule Kaffy.ResourceSchema do
     end
   end
 
-  def has_field_filters?(resource) do
-    admin_fields = Kaffy.ResourceAdmin.index(resource)
+  def has_field_filters?(resource, conn) do
+    admin_fields = Kaffy.ResourceAdmin.index(resource, conn)
 
     fields_with_filters =
       Enum.map(admin_fields, fn f -> kaffy_field_filters(resource[:schema], f) end)

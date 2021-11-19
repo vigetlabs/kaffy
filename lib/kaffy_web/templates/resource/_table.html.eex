@@ -1,6 +1,6 @@
 <table class="table table-striped">
     <thead>
-        <%= render KaffyWeb.ResourceView, "_table_header.html", my_resource: @my_resource, fields: @fields, params: @params %>
+        <%= render KaffyWeb.ResourceView, "_table_header.html", my_resource: @my_resource, fields: @fields, params: @params, conn: @conn %>
     </thead>
 
     <tbody>

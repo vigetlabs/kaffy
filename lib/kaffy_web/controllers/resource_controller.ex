@@ -22,7 +22,7 @@ defmodule KaffyWeb.ResourceController do
         unauthorized_access(conn)
 
       true ->
-        fields = Kaffy.ResourceAdmin.index(my_resource)
+        fields = Kaffy.ResourceAdmin.index(my_resource, conn)
         {filtered_count, entries} = Kaffy.ResourceQuery.list_resource(conn, my_resource, params)
         items_per_page = Map.get(params, "limit", "100") |> String.to_integer()
         page = Map.get(params, "page", "1") |> String.to_integer()
@@ -59,7 +59,7 @@ defmodule KaffyWeb.ResourceController do
         unauthorized_access(conn)
 
       true ->
-        fields = Kaffy.ResourceAdmin.index(my_resource)
+        fields = Kaffy.ResourceAdmin.index(my_resource, conn)
         {filtered_count, entries} = Kaffy.ResourceQuery.list_resource(conn, my_resource, params)
         items_per_page = Map.get(params, "limit", "100") |> String.to_integer()
         page = Map.get(params, "page", "1") |> String.to_integer()
