@@ -2,6 +2,7 @@ ExUnit.start()
 
 defmodule KaffyTest.Schemas.Person do
   use Ecto.Schema
+  import Ecto.Changeset
 
   schema "people" do
     field(:name, :string)
@@ -11,6 +12,11 @@ defmodule KaffyTest.Schemas.Person do
     field(:address, :string)
     has_many(:pets, KaffyTest.Schemas.Pet)
   end
+
+  def changeset(person, params \\ %{}) do
+    person
+    |> cast(params, [:name, :age, :married, :birth_date, :address])
+  end
 end
 
 defmodule KaffyTest.Admin.PersonAdmin do
@@ -18,6 +24,18 @@ defmodule KaffyTest.Admin.PersonAdmin do
     [
       name: nil,
       married: %{value: fn p -> if p.married, do: "yes", else: "no" end}
+    ]
+  end
+
+  def form_fields(_schema) do
+    [
+      address: %{render_form: &render_form/5}
+    ]
+  end
+
+  def render_form(_conn, _changeset, _form, _field, _options) do
+    [
+      {:safe, ~s(<div class="form-group">Custom Form Field Goes Here.</div>)}
     ]
   end
 end
