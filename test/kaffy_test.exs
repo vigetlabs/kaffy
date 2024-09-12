@@ -2,7 +2,7 @@ defmodule KaffyTest do
   use ExUnit.Case
   doctest Kaffy
   alias KaffyTest.Schemas.{Person, Pet}
-  # alias KaffyTest.Admin.PersonAdmin
+  alias KaffyTest.Admin.PersonAdmin
 
   test "greets the world" do
     assert Kaffy.hello() == :world
@@ -78,6 +78,19 @@ defmodule KaffyTest do
     test "association_schema/2 must return the schema of the association" do
       assert Pet == ResourceSchema.association_schema(Person, :pets)
       assert Person == ResourceSchema.association_schema(Pet, :person)
+    end
+  end
+
+  describe "Kaffy.ResourceForm" do
+    alias Kaffy.ResourceAdmin
+    alias Kaffy.ResourceForm
+
+    test "kaffy_input/5 should return the custom form field when render_form is in options" do
+      for {field, options} <- ResourceAdmin.form_fields(%{admin: PersonAdmin, schema: Person}) do
+        assert [
+          {:safe, ~s(<div class="form-group">Custom Form Field Goes Here.</div>)}
+        ] == ResourceForm.kaffy_input(nil, Person.changeset(%Person{}, %{address: "101 Baker St"}), nil, field, options)
+      end
     end
   end
 
