@@ -42,10 +42,19 @@
           <ul class="nav">
 
             <%= if Kaffy.Utils.show_dashboard?() do %>
-              <li class="nav-item<%= if @conn.assigns[:context] == nil do %> active<% end %>">
+              <li class="nav-item<%= if @conn.assigns[:context] == nil and @conn.assigns[:dashboard_context] == nil do %> active<% end %>">
                 <%= link to: Kaffy.Utils.router().kaffy_dashboard_path(@conn, :dashboard), class: "nav-link" do %>
                   <span class="menu-title">Dashboard</span>
                   <i class="fas fa-home menu-icon"></i>
+                <% end %>
+              </li>
+            <% end %>
+
+            <%= for dashboard <- Kaffy.Utils.dashboard_contexts(@conn) do %>
+              <li class="nav-item<%= if @conn.assigns[:dashboard_context] == to_string(dashboard) do %> active<% end %>">
+                <%= link to: Kaffy.Utils.router().kaffy_custom_dashboard_path(@conn, :index, dashboard), class: "nav-link" do %>
+                  <span class="menu-title"><%= Kaffy.Utils.dashboard_context_name(@conn, dashboard) %></span>
+                  <i class="fas fa-chart-line menu-icon"></i>
                 <% end %>
               </li>
             <% end %>
