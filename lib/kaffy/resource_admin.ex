@@ -12,7 +12,7 @@ defmodule Kaffy.ResourceAdmin do
   """
 
   @doc """
-  `index/1` takes the schema module and should return a keyword list of fields and
+  `index/2` takes the schema module and should return a keyword list of fields and
   their options.
 
   Supported options are `:name` and `:value`.
@@ -21,7 +21,7 @@ defmodule Kaffy.ResourceAdmin do
 
   If a function is provided, the current entry is passed to it.
 
-  If index/1 is not defined, Kaffy will return all the fields of the schema and their default values.
+  If index/2 is not defined, Kaffy will return all the fields of the schema and their default values.
 
   ## Examples
 
@@ -37,13 +37,13 @@ defmodule Kaffy.ResourceAdmin do
   end
   ```
   """
-  def index(resource) do
+  def index(resource, conn) do
     schema = resource[:schema]
-    Utils.get_assigned_value_or_default(resource, :index, ResourceSchema.index_fields(schema))
+    Utils.get_assigned_value_or_default(resource, :index, ResourceSchema.index_fields(schema), [conn])
   end
 
   @doc """
-  form_fields/1 takes a schema and returns a keyword list of fields and their options for the new/edit form.
+  form_fields/2 takes a schema and returns a keyword list of fields and their options for the new/edit form.
 
   Supported options are:
 
@@ -58,13 +58,13 @@ defmodule Kaffy.ResourceAdmin do
 
   If you want to remove a field from being rendered, just remove it from the list.
 
-  If form_fields/1 is not defined, Kaffy will return all the fields with
+  If form_fields/2 is not defined, Kaffy will return all the fields with
   their default types based on the schema.
 
   ## Examples
 
   ```elixir
-  def form_fields(_schema) do
+  def form_fields(_schema, _conn) do
     [
       title: %{label: "Subject"},
       slug: nil,
@@ -76,13 +76,14 @@ defmodule Kaffy.ResourceAdmin do
   end
   ```
   """
-  def form_fields(resource) do
+  def form_fields(resource, conn) do
     schema = resource[:schema]
 
     Utils.get_assigned_value_or_default(
       resource,
       :form_fields,
-      ResourceSchema.form_fields(schema)
+      ResourceSchema.form_fields(schema),
+      [conn]
     )
     |> set_default_field_options(schema)
   end

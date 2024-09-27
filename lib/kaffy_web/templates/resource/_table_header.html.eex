@@ -19,7 +19,7 @@
     <% end %>
 </tr>
 
-<%= if Kaffy.ResourceSchema.has_field_filters?(@my_resource) do %>
+<%= if Kaffy.ResourceSchema.has_field_filters?(@my_resource, @conn) do %>
     <tr>
         <th class="bg-light"></th>
         <%= for {field, index} <- Enum.with_index(@fields) do %>
